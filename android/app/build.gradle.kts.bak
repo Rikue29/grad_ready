@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.grad_ready"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion =  "27.0.12077973"
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -28,6 +28,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Add this for record package
+        manifestPlaceholders["recordNamespace"] = "com.llfbandit.record"
     }
 
     buildTypes {
@@ -36,6 +39,12 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+
+    // Add this to handle the record package
+    dependencies {
+        implementation("androidx.core:core-ktx:1.12.0")
+        implementation("androidx.appcompat:appcompat:1.6.1")
     }
 }
 
