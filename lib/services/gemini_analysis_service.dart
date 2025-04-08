@@ -12,9 +12,6 @@ class GeminiAnalysisService {
     try {
       print('Initializing Gemini AI...');
       final apiKey = EnvConfigService.geminiApiKey;
-      if (apiKey == null) {
-        throw Exception('Gemini API key not found in environment variables');
-      }
 
       final model = GenerativeModel(
         model: 'gemini-2.0-flash',

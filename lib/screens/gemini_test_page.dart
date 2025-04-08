@@ -291,6 +291,9 @@ class _GeminiTestPageState extends State<GeminiTestPage> {
       backgroundColor: const Color(0xFF1C2632),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C2632),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF6B00), // Orange color to match the button
+        ),
         title: const Text(
           'Gemini AI Test',
           style: TextStyle(color: Colors.white),

@@ -46,6 +46,9 @@ class _GcpTestPageState extends State<GcpTestPage> {
       backgroundColor: const Color(0xFF1C2632),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C2632),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF6B00), // Orange color to match the button
+        ),
         title: const Text(
           "GCP Connection Test",
           style: TextStyle(
