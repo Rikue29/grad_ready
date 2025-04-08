@@ -11,7 +11,8 @@ class PresentationAnalysisService {
 
     try {
       print('Getting GCP credentials from environment...');
-      final credentialsData = EnvConfigService.gcpCredentials;
+      // Use await to get the credentials since it's now async
+      final credentialsData = await EnvConfigService.gcpCredentials;
 
       final credentials = ServiceAccountCredentials(
         credentialsData['client_email'],
@@ -39,7 +40,8 @@ class PresentationAnalysisService {
 
     try {
       print('Testing connection to Google Cloud...');
-      final projectId = EnvConfigService.gcpCredentials['project_id'];
+      // Use await here as well
+      final projectId = (await EnvConfigService.gcpCredentials)['project_id'];
       print('Listing locations for project $projectId...');
       await _aiPlatform.locations.list('projects/$projectId');
       print('Connection test successful');
