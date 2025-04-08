@@ -43,5 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-assets/service-account.json
 .env
+assets/service-account.json
+assets/keys/service-speech-to-text.json
