@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'gcp_test_page.dart';
 import 'live_presentation_page.dart';
+import 'audio_analysis_page.dart';
 
 class PresentationHomePage extends StatelessWidget {
   const PresentationHomePage({super.key});
@@ -90,12 +91,7 @@ class PresentationHomePage extends StatelessWidget {
                             icon: Icons.upload_file,
                             label: "Upload File",
                             onTap: () {
-                              // TODO: Implement file upload
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Feature coming soon!'),
-                                ),
-                              );
+                              Navigator.pushNamed(context, '/audio-analysis');
                             },
                           ),
                         ],

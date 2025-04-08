@@ -1,45 +1,31 @@
 import 'package:flutter/material.dart';
-import '../services/speech_recognition_service.dart';
-import '../services/gemini_analysis_service.dart';
-import 'package:avatar_glow/avatar_glow.dart';
+import 'dart:io';
 
-class LivePresentationPage extends StatefulWidget {
-  const LivePresentationPage({Key? key}) : super(key: key);
+class AudioAnalysisPage extends StatefulWidget {
+  const AudioAnalysisPage({super.key});
 
   @override
-  _LivePresentationPageState createState() => _LivePresentationPageState();
+  State<AudioAnalysisPage> createState() => _AudioAnalysisPageState();
 }
 
-class _LivePresentationPageState extends State<LivePresentationPage> {
-  final _speechService = SpeechRecognitionService();
-  final _geminiService = GeminiAnalysisService();
-  String _transcriptText = 'Press the button and start speaking';
-  double _confidence = 1.0;
-  bool _isInitialized = false;
+class _AudioAnalysisPageState extends State<AudioAnalysisPage> {
   bool _isAnalyzing = false;
+  File? _audioFile;
   Map<String, dynamic>? _analysis;
+  String _status = 'No file selected';
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeSpeech();
-    _initializeGemini();
-  }
-
-  Future<void> _initializeGemini() async {
-    await _geminiService.initialize();
-    await _geminiService.testConnection();
-  }
-
-  Future<void> _initializeSpeech() async {
-    final available = await _speechService.initialize();
+  Future<void> _pickAudioFile() async {
+    // TODO: Implement file picking
     setState(() {
-      _isInitialized = available;
+      _status = 'Selected audio file: example.mp3';
     });
   }
 
-  Future<void> _analyzeTranscript() async {
-    if (_transcriptText.isEmpty || _transcriptText == 'Press the button and start speaking') {
+  Future<void> _analyzeAudio() async {
+    if (_audioFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an audio file first')),
+      );
       return;
     }
 
@@ -48,54 +34,119 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       _analysis = null;
     });
 
-    try {
-      final analysis = await _geminiService.analyzeSpeech(_transcriptText);
-      setState(() {
-        _analysis = analysis;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Analysis failed: $e')),
-      );
-    } finally {
-      setState(() {
-        _isAnalyzing = false;
-      });
-    }
+    // TODO: Implement actual audio analysis
+    await Future.delayed(const Duration(seconds: 2)); // Simulated delay
+
+    // Simulated analysis result
+    setState(() {
+      _isAnalyzing = false;
+      _analysis = {
+        'clarity_score': 0.85,
+        'confidence_score': 0.78,
+        'filler_words': {
+          'um': 3,
+          'uh': 2,
+          'like': 4,
+        },
+        'pacing_feedback': 'Good pace with clear articulation. Consider slowing down slightly during technical explanations.',
+        'key_points': [
+          'Introduction to the main topic',
+          'Discussion of key features',
+          'Summary of benefits',
+        ],
+        'improvements': [
+          'Reduce usage of filler words',
+          'Add more pauses for emphasis',
+          'Provide more specific examples',
+        ],
+      };
+    });
   }
 
-  void _listen() async {
-    if (!_isInitialized) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Speech recognition not available'),
-        ),
-      );
-      return;
-    }
-
-    if (!_speechService.isListening) {
-      setState(() {
-        _analysis = null;
-      });
-      await _speechService.startListening(
-        onTranscript: (text) {
-          setState(() {
-            _transcriptText = text;
-          });
-        },
-        onConfidenceUpdate: (confidence) {
-          setState(() {
-            _confidence = confidence;
-          });
-        },
-      );
-    } else {
-      await _speechService.stopListening();
-      // Analyze the transcript after stopping
-      await _analyzeTranscript();
-    }
-    setState(() {}); // Update UI to reflect listening state
+  Widget _buildUploadSection() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C2632),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _audioFile == null ? Icons.upload_file : Icons.audio_file,
+            size: 64,
+            color: const Color(0xFFFF6B00),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _status,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: _pickAudioFile,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF6B00),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.file_upload, color: Colors.white),
+                SizedBox(width: 8),
+                Text(
+                  'Select Audio File',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_audioFile != null) ...[
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _isAnalyzing ? null : _analyzeAudio,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF6B00),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _isAnalyzing ? Icons.hourglass_empty : Icons.analytics,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    _isAnalyzing ? 'Analyzing...' : 'Analyze Audio',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 
   Widget _buildAnalysisResult() {
@@ -112,35 +163,23 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (_analysis!.containsKey('clarity_score'))
-            _buildScoreRow('Clarity Score', _analysis!['clarity_score']),
-          if (_analysis!.containsKey('filler_words')) ...[
-            const SizedBox(height: 16),
-            _buildFillerWords(),
-          ],
-          if (_analysis!.containsKey('pacing_feedback')) ...[
-            const SizedBox(height: 16),
-            _buildPacingInfo(),
-          ],
-          if (_analysis!.containsKey('key_points')) ...[
-            const SizedBox(height: 16),
-            _buildKeyPoints(),
-          ],
-          if (_analysis!.containsKey('improvements')) ...[
-            const SizedBox(height: 16),
-            _buildImprovements(),
-          ],
-          if (_analysis!.containsKey('confidence_score')) ...[
-            const SizedBox(height: 16),
-            _buildScoreRow('Confidence Score', _analysis!['confidence_score']),
-          ],
+          _buildScoreRow('Clarity Score', _analysis!['clarity_score']),
+          const SizedBox(height: 16),
+          _buildFillerWords(),
+          const SizedBox(height: 16),
+          _buildPacingInfo(),
+          const SizedBox(height: 16),
+          _buildKeyPoints(),
+          const SizedBox(height: 16),
+          _buildImprovements(),
+          const SizedBox(height: 16),
+          _buildScoreRow('Confidence Score', _analysis!['confidence_score']),
         ],
       ),
     );
   }
 
   Widget _buildScoreRow(String label, dynamic score) {
-    // Convert score to double
     final double scoreValue = score is int ? score.toDouble() : (score as double);
     
     return Row(
@@ -346,12 +385,6 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   @override
-  void dispose() {
-    _speechService.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1C2632),
@@ -360,50 +393,26 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
         iconTheme: const IconThemeData(
           color: Color(0xFFFF6B00),
         ),
-        title: Text(
-          'Confidence: ${(_confidence * 100).toStringAsFixed(1)}%',
-          style: const TextStyle(color: Colors.white),
+        title: const Text(
+          'Audio Analysis',
+          style: TextStyle(color: Colors.white),
         ),
         elevation: 0,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: AvatarGlow(
-        animate: _speechService.isListening,
-        glowColor: const Color(0xFFFF6B00),
-        endRadius: 75.0,
-        duration: const Duration(milliseconds: 2000),
-        repeatPauseDuration: const Duration(milliseconds: 100),
-        repeat: true,
-        child: FloatingActionButton(
-          onPressed: _listen,
-          backgroundColor: const Color(0xFFFF6B00),
-          child: Icon(
-            _speechService.isListening ? Icons.mic : Icons.mic_none,
-            color: Colors.white,
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-              child: Text(
-                _transcriptText,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            _buildUploadSection(),
             if (_isAnalyzing)
               const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xFFFF6B00),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFFF6B00),
+                  ),
                 ),
               ),
             _buildAnalysisResult(),
-            const SizedBox(height: 100), // Space for the floating button
           ],
         ),
       ),

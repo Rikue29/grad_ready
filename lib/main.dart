@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/presentation_homepage.dart';
 import 'screens/gemini_test_page.dart';
 import 'services/env_config_service.dart';
+import 'screens/audio_analysis_page.dart'; // added import statement
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const PresentationHomePage(),
         '/gemini-test': (context) => const GeminiTestPage(),
+        '/audio-analysis': (context) => const AudioAnalysisPage(),
       },
     );
   }

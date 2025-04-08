@@ -11,6 +11,8 @@ class SpeechRecognitionService {
   Function(double)? _onConfidenceUpdate;
   StreamSubscription? _streamSubscription;
   SpeechToText? _speechToText;
+  String _completeTranscript = '';
+  String _lastInterimResult = '';
 
   bool get isListening => _isListening;
   double get confidence => _confidence;
@@ -53,6 +55,8 @@ class SpeechRecognitionService {
 
     _onTranscript = onTranscript;
     _onConfidenceUpdate = onConfidenceUpdate;
+    _completeTranscript = ''; // Reset the complete transcript when starting new session
+    _lastInterimResult = '';
 
     try {
       _isListening = true;
@@ -84,7 +88,20 @@ class SpeechRecognitionService {
           if (data.results.isNotEmpty) {
             final result = data.results.first;
             final transcript = result.alternatives.first.transcript;
-            _onTranscript?.call(transcript);
+
+            // Handle the transcript based on whether it's final or interim
+            if (result.isFinal) {
+              // For final results, append to the complete transcript
+              _completeTranscript += ' ' + transcript;
+              _lastInterimResult = '';
+            } else {
+              // For interim results, store temporarily
+              _lastInterimResult = transcript;
+            }
+
+            // Combine complete transcript with current interim result
+            final fullTranscript = (_completeTranscript + ' ' + _lastInterimResult).trim();
+            _onTranscript?.call(fullTranscript);
 
             // Update confidence if available
             if (result.alternatives.first.confidence > 0) {
@@ -99,9 +116,8 @@ class SpeechRecognitionService {
         },
       );
     } catch (e) {
-      print('Error starting recording: $e');
+      print('Error starting recognition: $e');
       _isListening = false;
-      throw Exception('Error starting recording: $e');
     }
   }
 
@@ -109,19 +125,23 @@ class SpeechRecognitionService {
     if (!_isListening) return;
 
     try {
-      await AudioStreamService.stopAudioStream();
-      _streamSubscription?.cancel();
+      await _streamSubscription?.cancel();
+      _streamSubscription = null;
       _isListening = false;
+      
+      // If there's any interim result when stopping, add it to complete transcript
+      if (_lastInterimResult.isNotEmpty) {
+        _completeTranscript += ' ' + _lastInterimResult;
+        _lastInterimResult = '';
+        _onTranscript?.call(_completeTranscript.trim());
+      }
     } catch (e) {
-      print('Error stopping recording: $e');
-      throw Exception('Error stopping recording: $e');
+      print('Error stopping recognition: $e');
     }
   }
 
   void dispose() {
-    _streamSubscription?.cancel();
-    if (_isListening) {
-      stopListening();
-    }
+    stopListening();
+    _speechToText = null;
   }
 }
