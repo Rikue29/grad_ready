@@ -1,6 +1,6 @@
 {
-    "name": "grad_ready",
-    "short_name": "grad_ready",
+    "name": "gradready_interview",
+    "short_name": "gradready_interview",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

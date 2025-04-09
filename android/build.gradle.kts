@@ -1,7 +1,19 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.10")
+    }
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+        // Add JCenter for legacy dependencies
+        jcenter()
     }
 }
 
@@ -12,6 +24,7 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
@@ -19,3 +32,5 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+// Remove the plugins block since we'll apply the plugin in the app module instead
