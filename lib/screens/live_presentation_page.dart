@@ -13,17 +13,24 @@ class LivePresentationPage extends StatefulWidget {
 class _LivePresentationPageState extends State<LivePresentationPage> {
   final _speechService = SpeechRecognitionService();
   final _geminiService = GeminiAnalysisService();
-  String _transcriptText = 'Press the button and start speaking';
+  String _transcriptText = 'Press the microphone button and start speaking';
   double _confidence = 1.0;
   bool _isInitialized = false;
   bool _isAnalyzing = false;
   Map<String, dynamic>? _analysis;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
     _initializeGemini();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _initializeGemini() async {
@@ -39,7 +46,7 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Future<void> _analyzeTranscript() async {
-    if (_transcriptText.isEmpty || _transcriptText == 'Press the button and start speaking') {
+    if (_transcriptText.isEmpty || _transcriptText == 'Press the microphone button and start speaking') {
       return;
     }
 
@@ -53,6 +60,13 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       setState(() {
         _analysis = analysis;
       });
+      // Scroll to analysis after a short delay
+      await Future.delayed(const Duration(milliseconds: 300));
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Analysis failed: $e')),
@@ -92,263 +106,9 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       );
     } else {
       await _speechService.stopListening();
-      // Analyze the transcript after stopping
       await _analyzeTranscript();
     }
-    setState(() {}); // Update UI to reflect listening state
-  }
-
-  Widget _buildAnalysisResult() {
-    if (_analysis == null) return const SizedBox.shrink();
-
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1C2632),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (_analysis!.containsKey('clarity_score'))
-            _buildScoreRow('Clarity Score', _analysis!['clarity_score']),
-          if (_analysis!.containsKey('filler_words')) ...[
-            const SizedBox(height: 16),
-            _buildFillerWords(),
-          ],
-          if (_analysis!.containsKey('pacing_feedback')) ...[
-            const SizedBox(height: 16),
-            _buildPacingInfo(),
-          ],
-          if (_analysis!.containsKey('key_points')) ...[
-            const SizedBox(height: 16),
-            _buildKeyPoints(),
-          ],
-          if (_analysis!.containsKey('improvements')) ...[
-            const SizedBox(height: 16),
-            _buildImprovements(),
-          ],
-          if (_analysis!.containsKey('confidence_score')) ...[
-            const SizedBox(height: 16),
-            _buildScoreRow('Confidence Score', _analysis!['confidence_score']),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScoreRow(String label, dynamic score) {
-    // Convert score to double
-    final double scoreValue = score is int ? score.toDouble() : (score as double);
-    
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-        const Spacer(),
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: const Color(0xFFFF6B00),
-              width: 3,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              '${(scoreValue * 100).round()}',
-              style: const TextStyle(
-                color: Color(0xFFFF6B00),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFillerWords() {
-    final fillerWordsMap = _analysis!['filler_words'] as Map<String, dynamic>;
-    if (fillerWordsMap.isEmpty) return const SizedBox.shrink();
-
-    final List<MapEntry<String, dynamic>> fillerWords = fillerWordsMap.entries.toList();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Filler Words Used:',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: fillerWords
-              .map((entry) => Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF6B00).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: const Color(0xFFFF6B00),
-                      ),
-                    ),
-                    child: Text(
-                      '${entry.key} (${entry.value})',
-                      style: const TextStyle(
-                        color: Color(0xFFFF6B00),
-                      ),
-                    ),
-                  ))
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPacingInfo() {
-    final pacingFeedback = _analysis!['pacing_feedback'] as String? ?? 'No pacing feedback available';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Pacing Analysis:',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          pacingFeedback,
-          style: const TextStyle(
-            color: Colors.white70,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildKeyPoints() {
-    final keyPoints = _analysis!['key_points'] as List<dynamic>? ?? [];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Key Points:',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(height: 8),
-        if (keyPoints.isEmpty)
-          const Text(
-            'No key points identified',
-            style: TextStyle(
-              color: Colors.white70,
-              fontStyle: FontStyle.italic,
-            ),
-          )
-        else
-          ...keyPoints.map((point) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '• ',
-                      style: TextStyle(
-                        color: Color(0xFFFF6B00),
-                        fontSize: 16,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        point.toString(),
-                        style: const TextStyle(
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-      ],
-    );
-  }
-
-  Widget _buildImprovements() {
-    final improvements = _analysis!['improvements'] as List<dynamic>? ?? [];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Suggested Improvements:',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(height: 8),
-        if (improvements.isEmpty)
-          const Text(
-            'No improvements suggested',
-            style: TextStyle(
-              color: Colors.white70,
-              fontStyle: FontStyle.italic,
-            ),
-          )
-        else
-          ...improvements.map((improvement) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '• ',
-                      style: TextStyle(
-                        color: Color(0xFFFF6B00),
-                        fontSize: 16,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        improvement.toString(),
-                        style: const TextStyle(
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    _speechService.dispose();
-    super.dispose();
+    setState(() {});
   }
 
   @override
@@ -357,55 +117,360 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       backgroundColor: const Color(0xFF1C2632),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C2632),
-        iconTheme: const IconThemeData(
-          color: Color(0xFFFF6B00),
-        ),
-        title: Text(
-          'Confidence: ${(_confidence * 100).toStringAsFixed(1)}%',
-          style: const TextStyle(color: Colors.white),
+        title: const Text(
+          'Live Presentation',
+          style: TextStyle(color: Colors.white),
         ),
         elevation: 0,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: AvatarGlow(
-        animate: _speechService.isListening,
-        glowColor: const Color(0xFFFF6B00),
-        endRadius: 75.0,
-        duration: const Duration(milliseconds: 2000),
-        repeatPauseDuration: const Duration(milliseconds: 100),
-        repeat: true,
-        child: FloatingActionButton(
-          onPressed: _listen,
-          backgroundColor: const Color(0xFFFF6B00),
-          child: Icon(
-            _speechService.isListening ? Icons.mic : Icons.mic_none,
-            color: Colors.white,
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-              child: Text(
-                _transcriptText,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+              _buildTranscriptCard(),
+              const SizedBox(height: 24),
+              if (_isAnalyzing)
+                const Column(
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B00)),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Analyzing your presentation...',
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  ],
                 ),
+              if (_analysis != null) ...[
+                _buildAnalysisResult(),
+                const SizedBox(height: 100), // Space for FAB
+              ],
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _buildMicButton(),
+    );
+  }
+
+  Widget _buildTranscriptCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFFF6B00).withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Your Speech',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            _transcriptText,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMicButton() {
+    final isListening = _speechService.isListening;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2A3543),
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isListening ? 'Tap to stop' : 'Tap to speak',
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                AvatarGlow(
+                  endRadius: 32,
+                  animate: isListening,
+                  duration: const Duration(milliseconds: 2000),
+                  glowColor: const Color(0xFFFF6B00),
+                  child: FloatingActionButton(
+                    onPressed: _listen,
+                    backgroundColor: isListening ? const Color(0xFFFF6B00) : const Color(0xFF2A3543),
+                    elevation: 0,
+                    child: Icon(
+                      isListening ? Icons.mic : Icons.mic_none,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnalysisResult() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Analysis Results',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildScoreCards(),
+          const SizedBox(height: 24),
+          _buildFillerWords(),
+          const SizedBox(height: 24),
+          _buildPacingInfo(),
+          const SizedBox(height: 24),
+          _buildKeyPoints(),
+          const SizedBox(height: 24),
+          _buildImprovements(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScoreCards() {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildScoreCard(
+            'Clarity',
+            _analysis!['clarity_score'],
+            Icons.volume_up,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildScoreCard(
+            'Confidence',
+            _analysis!['confidence_score'],
+            Icons.psychology,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScoreCard(String label, double score, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A3543),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, color: const Color(0xFFFF6B00)),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color(0xFFFF6B00),
+                    width: 2,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    '${(score * 100).round()}',
+                    style: const TextStyle(
+                      color: Color(0xFFFF6B00),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFillerWords() {
+    final fillerWordsMap = _analysis!['filler_words'] as Map<String, dynamic>;
+    if (fillerWordsMap.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Filler Words'),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: fillerWordsMap.entries.map((entry) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF6B00).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFFF6B00)),
+              ),
+              child: Text(
+                '${entry.key} (${entry.value})',
+                style: const TextStyle(
+                  color: Color(0xFFFF6B00),
+                  fontSize: 14,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPacingInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Pacing'),
+        const SizedBox(height: 12),
+        Text(
+          _analysis!['pacing_feedback'] as String,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.9),
+            fontSize: 15,
+            height: 1.5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildKeyPoints() {
+    final points = _analysis!['key_points'] as List<dynamic>;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Key Points'),
+        const SizedBox(height: 12),
+        ...points.map((point) => _buildBulletPoint(point.toString())),
+      ],
+    );
+  }
+
+  Widget _buildImprovements() {
+    final improvements = _analysis!['improvements'] as List<dynamic>;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Suggested Improvements'),
+        const SizedBox(height: 12),
+        ...improvements.map((improvement) => _buildBulletPoint(improvement.toString())),
+      ],
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildBulletPoint(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '• ',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 16,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 15,
+                height: 1.5,
               ),
             ),
-            if (_isAnalyzing)
-              const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xFFFF6B00),
-                ),
-              ),
-            _buildAnalysisResult(),
-            const SizedBox(height: 100), // Space for the floating button
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

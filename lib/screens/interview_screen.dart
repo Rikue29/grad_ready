@@ -162,6 +162,12 @@ class _InterviewScreenState extends State<InterviewScreen> {
         backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(

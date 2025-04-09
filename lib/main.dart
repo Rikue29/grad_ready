@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/presentation_homepage.dart';
 import 'screens/gemini_test_page.dart';
 import 'services/env_config_service.dart';
-import 'screens/audio_analysis_page.dart'; // added import statement
+import 'screens/audio_analysis_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/interview_screen.dart';
 
@@ -25,9 +25,8 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFFFF6B00),
         scaffoldBackgroundColor: const Color(0xFF1C2632),
       ),
-      initialRoute: '/',
+      home: const PresentationHomePage(),
       routes: {
-        '/': (context) => const PresentationHomePage(),
         '/gemini-test': (context) => const GeminiTestPage(),
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewScreen(),
