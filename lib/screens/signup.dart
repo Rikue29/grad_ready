@@ -1,13 +1,42 @@
 import 'package:flutter/material.dart';
+import '../services/firebase_auth_service.dart';
+import 'home.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+  SignupPage({super.key});
+
+  final FirebaseAuthService _authService = FirebaseAuthService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  void _signup(BuildContext context) async {
+    try {
+      await _authService.signUpWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
+      );
+      // Navigate to HomePage if signup is successful
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } catch (e) {
+      print('Failed to sign up: $e');
+      // Show error message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign up: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.deepOrange, // Set a solid background color
+        color: Colors.deepOrange,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -15,7 +44,10 @@ class SignupPage extends StatelessWidget {
             children: [
               const Text(
                 'Sign Up',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
               const SizedBox(height: 8),
               const Text(
@@ -33,18 +65,16 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
                   filled: true,
                   fillColor: Colors.white,
+                  hintText: 'Enter your email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                style: const TextStyle(height: 1.2), // Reduce height
               ),
               const SizedBox(height: 16),
               const Align(
@@ -56,18 +86,16 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _usernameController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
                   filled: true,
                   fillColor: Colors.white,
+                  hintText: 'Enter your username',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                style: const TextStyle(height: 1.2), // Reduce height
               ),
               const SizedBox(height: 16),
               const Align(
@@ -79,19 +107,17 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
                   filled: true,
                   fillColor: Colors.white,
+                  hintText: 'Enter your password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                obscureText: true,
-                style: const TextStyle(height: 1.2), // Reduce height
               ),
               const SizedBox(height: 16),
               const Align(
@@ -103,37 +129,46 @@ class SignupPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _confirmPasswordController,
+                obscureText: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
                   filled: true,
                   fillColor: Colors.white,
+                  hintText: 'Confirm your password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                obscureText: true,
-                style: const TextStyle(height: 1.2), // Reduce height
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate back to login page
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: const Color(0xFF1E232C),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => _signup(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E232C),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.deepOrange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                child: const Text('Sign Up'),
               ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Already have an account? ", style: TextStyle(color: Colors.white)),
+                  const Text("Already have an account? ",
+                      style: TextStyle(color: Colors.white)),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -146,14 +181,16 @@ class SignupPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              const Text('Or Continue With', style: TextStyle(color: Colors.white)),
+              const Text('Or Continue With',
+                  style: TextStyle(color: Colors.white)),
               const SizedBox(height: 16),
               Column(
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.facebook, color: Colors.white),
-                    label: const Text('Continue with Facebook', style: TextStyle(color: Colors.white)),
+                    label: const Text('Continue with Facebook',
+                        style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1877F2), // Facebook blue
                       minimumSize: const Size(double.infinity, 50),
@@ -162,8 +199,10 @@ class SignupPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Image.network('https://www.google.com/favicon.ico', height: 24),
-                    label: const Text('Log In with Google', style: TextStyle(color: Colors.black)),
+                    icon: Image.network('https://www.google.com/favicon.ico',
+                        height: 24),
+                    label: const Text('Log In with Google',
+                        style: TextStyle(color: Colors.black)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),

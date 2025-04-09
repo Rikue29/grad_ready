@@ -20,8 +20,14 @@ tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
 
-dependencies {
-    classpath 'com.google.gms:google-services:4.3.10'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.10")
+    }
 }
 
-apply plugin: 'com.google.gms.google-services'
+// Remove the plugins block since we'll apply the plugin in the app module instead
