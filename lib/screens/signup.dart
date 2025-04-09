@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gradready_interview/screens/homepage.dart';
 import '../services/firebase_auth_service.dart';
-import 'home.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -21,7 +21,7 @@ class SignupPage extends StatelessWidget {
       // Navigate to HomePage if signup is successful
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const HomeContent()),
       );
     } catch (e) {
       print('Failed to sign up: $e');

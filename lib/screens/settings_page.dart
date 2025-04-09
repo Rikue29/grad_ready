@@ -6,11 +6,29 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: const Color(0xFFFF6B00),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF10182F),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.orange),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "Settings",
+          style: TextStyle(
+            color: Colors.orange,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildTopBar(),
             const SizedBox(height: 16),
             _buildUserTile(),
             const Divider(thickness: 1.3, color: Color(0xFF10182F)),

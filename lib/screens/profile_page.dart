@@ -15,28 +15,29 @@ class ProfilePage extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFF6F00),
-      body: SafeArea(
-        child: Column(
-          children: [_buildHeader(), Expanded(child: _buildProfileDetails())],
+      backgroundColor: const Color(0xFFFF6B00),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF10182F),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.orange),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: const Color(0xFF10182F),
-      width: double.infinity,
-      child: const Center(
-        child: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
             color: Colors.orange,
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
+        ),
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [Expanded(child: _buildProfileDetails())],
         ),
       ),
     );

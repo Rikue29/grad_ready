@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart'; // Ensure this file exists and is correct
+import 'package:gradready_interview/screens/splash_screen.dart';
+import 'screens/homepage.dart'; // Ensure this file exists and is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login.dart';
@@ -30,21 +31,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       title: 'GradReady',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFFFF6B00),
         scaffoldBackgroundColor: const Color(0xFF1C2632),
       ),
-      home: LoginPage(),
+      home: SplashScreen(),
       routes: {
         '/login': (context) => LoginPage(),
         '/presentation': (context) => const PresentationHomePage(),
         '/gemini-test': (context) => const GeminiTestPage(),
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewRoleScreen(),
-        '/homepage': (context) => const HomePageStateful(),
+        '/splashpage': (context) => const SplashScreen(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class SplashScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  "“Step Up with Confidence, from\nClassroom to Career”",
+                  "\"Step Up with Confidence, from\nClassroom to Career\"",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -52,7 +53,10 @@ class SplashScreen extends StatelessWidget {
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to the next screen
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(
