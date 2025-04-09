@@ -41,7 +41,10 @@ dependencies:
   google_generative_ai: ^0.2.0
   flutter_dotenv: ^5.1.0
   googleapis: ^14.0.0
+  google_fonts: ^6.2.1
 
+  http: any
+  googleapis_auth: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

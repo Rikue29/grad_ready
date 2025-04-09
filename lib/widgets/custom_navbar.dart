@@ -16,22 +16,27 @@ class CustomNavBar extends StatelessWidget {
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.orange,
-            child: Icon(Icons.home, color: Colors.black),
-          ),
-          label: 'Home',
+          icon: Icon(Icons.book),
+          label: 'Presentation',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
           label: 'Settings',
         ),
       ],
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12,
+      ),
     );
   }
 }

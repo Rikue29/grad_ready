@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:googleapis/speech/v1.dart' as speech;
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
 
 class STTService {
   static Future<String?> transcribeAudio(File audioFile) async {
