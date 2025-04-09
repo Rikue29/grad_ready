@@ -28,7 +28,7 @@ Powered by:
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/gradready-interview.git
+git clone https://github.com/rikue29/grad_ready.git
 cd gradready-interview
 ```
 
