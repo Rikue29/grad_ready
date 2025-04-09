@@ -43,6 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# API Keys and Environment Variables
 .env
+lib/config/api_keys.dart
 assets/service-account.json
 assets/keys/service-speech-to-text.json

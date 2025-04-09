@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   googleapis: ^11.0.0
   googleapis_auth: ^1.4.0
   path_provider: ^2.0.15
@@ -38,7 +37,6 @@ dependencies:
   google_speech: ^5.3.0
   grpc: ^3.2.4
   protobuf: ^3.1.0
-  record: ^5.0.0
   permission_handler: ^11.1.0
   avatar_glow: ^2.0.2
   google_generative_ai: ^0.2.0
@@ -53,7 +51,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
