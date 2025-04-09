@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'gcp_test_page.dart';
 import 'live_presentation_page.dart';
+import 'audio_analysis_page.dart';
+import 'profile_page.dart';
+import 'settings_page.dart';
 import '../widgets/custom_navbar.dart';
+
 
 class PresentationHomePage extends StatelessWidget {
   const PresentationHomePage({super.key});
@@ -114,6 +118,7 @@ class PresentationHomePage extends StatelessWidget {
               ],
             ),
           ),
+          _buildBottomNav(context),
         ],
       ),
       bottomNavigationBar: CustomNavBar(
@@ -173,6 +178,82 @@ class PresentationHomePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBottomNav(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      color: const Color(0xFF1C2632),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _BottomNavItem(
+            icon: Icons.person,
+            label: "Profile",
+            isSelected: false,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
+            },
+          ),
+          _BottomNavItem(
+            icon: Icons.home,
+            label: "Home",
+            isSelected: true,
+            onTap: () {
+              // Stay on home page
+            },
+          ),
+          _BottomNavItem(
+            icon: Icons.settings,
+            label: "Settings",
+            isSelected: false,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BottomNavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _BottomNavItem({
+    required this.icon,
+    required this.label,
+    this.isSelected = false,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: isSelected ? const Color(0xFFFF6B00) : Colors.grey),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFFFF6B00) : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }

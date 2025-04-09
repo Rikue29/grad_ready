@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gradready_interview/screens/splash_screen.dart';
+import 'screens/homepage.dart'; // Ensure this file exists and is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login.dart';
@@ -15,6 +17,7 @@ void main() async {
   await Firebase.initializeApp();
   await EnvConfigService.initialize();
   await dotenv.load();
+
   runApp(const MyApp());
 }
 
@@ -30,13 +33,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: LoginPage(),
+      home: SplashScreen(),
       routes: {
         '/login': (context) => LoginPage(),
         '/presentation': (context) => const PresentationHomePage(),
         '/gemini-test': (context) => const GeminiTestPage(),
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewRoleScreen(),
+        '/splashpage': (context) => const SplashScreen(),
       },
     );
   }
