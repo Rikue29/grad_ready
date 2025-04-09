@@ -69,6 +69,11 @@ flutter:
     - assets/service-account.json
     - .env
     - assets/images/texture.png
+    - assets/img/interviewperson.jpg
+    - assets/img/presentation.jpg
+    - assets/img/profile.jpg
+    - assets/img/graduation.png
+    -  assets/img/texture.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -95,3 +100,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf

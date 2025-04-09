@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'homepage.dart'; // Ensure this file exists and is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login.dart';
@@ -19,6 +20,7 @@ void main() async {
   await Firebase.initializeApp();
   await EnvConfigService.initialize();
   await dotenv.load();
+
   runApp(const MyApp());
 }
 
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: 'GradReady',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/gemini-test': (context) => const GeminiTestPage(),
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewRoleScreen(),
+        '/homepage': (context) => const HomePageStateful(),
       },
     );
   }
