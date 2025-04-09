@@ -18,11 +18,14 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFF6B00), // Orange background
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1C2632),
         title: const Text(
           'Mock Interview',
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
-        backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -34,8 +37,10 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
             child: Image.asset(
               'assets/images/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity (1.0 for solid white)
-              colorBlendMode: BlendMode.srcOut, // Blend mode to apply the white color
+              color: Colors.white
+                  .withOpacity(0.2), // Adjust opacity (1.0 for solid white)
+              colorBlendMode:
+                  BlendMode.srcOut, // Blend mode to apply the white color
             ),
           ),
           // Main content
@@ -67,7 +72,8 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
-                            color: Colors.white, // Black text for better readability
+                            color: Colors
+                                .white, // Black text for better readability
                           ),
                         ),
                       );
@@ -81,36 +87,50 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
                       labelText: 'Select Field',
                       labelStyle: TextStyle(color: Colors.white), // White label
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black), // Black outline
+                        borderSide:
+                            BorderSide(color: Colors.black), // Black outline
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black), // Black outline when enabled
+                        borderSide: BorderSide(
+                            color: Colors.black), // Black outline when enabled
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0), // Thicker black outline when focused
+                        borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2.0), // Thicker black outline when focused
                       ),
                     ),
-                    dropdownColor: Colors.white, // White dropdown background for contrast
+                    dropdownColor:
+                        Colors.white, // White dropdown background for contrast
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: roleController,
                     textInputAction: TextInputAction.done,
-                    style: const TextStyle(color: Colors.white), // White input text
+                    style: const TextStyle(
+                        color: Colors.white), // White input text
                     decoration: const InputDecoration(
                       hintText: 'Enter a specific job role (e.g., UI Designer)',
-                      hintStyle: TextStyle(color: Colors.white70), // White hint text
+                      hintStyle:
+                          TextStyle(color: Colors.white70), // White hint text
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black), // Black outline
+                        borderSide:
+                            BorderSide(color: Colors.black), // Black outline
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black), // Black outline when enabled
+                        borderSide: BorderSide(
+                            color: Colors.black), // Black outline when enabled
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0), // Thicker black outline when focused
+                        borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2.0), // Thicker black outline when focused
                       ),
                       labelText: 'Job Role',
-                      labelStyle: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.white),
+                      labelStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -121,12 +141,14 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => InterviewMockScreen(jobRole: jobRole),
+                            builder: (context) =>
+                                InterviewMockScreen(jobRole: jobRole),
                           ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please enter a job role')),
+                          const SnackBar(
+                              content: Text('Please enter a job role')),
                         );
                       }
                     },
@@ -134,9 +156,13 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
                       backgroundColor: Colors.white, // White button
                       foregroundColor: const Color(0xFFFF6B00), // Orange text
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      textStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.bold),
+                      textStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                        borderRadius:
+                            BorderRadius.circular(12), // Rounded corners
                       ),
                     ),
                     child: const Text('Get Started!'),
