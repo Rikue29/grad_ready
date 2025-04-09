@@ -6,27 +6,38 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView( // Wrap the Column in SingleChildScrollView
+      backgroundColor: Colors.orange,
+      body: SingleChildScrollView(
         child: Column(
           children: [
             _buildTopBar(),
             const SizedBox(height: 16),
             _buildUserTile(),
-            const Divider(thickness: 1.2),
+            const Divider(thickness: 1.3, color: Color(0xFF10182F)),
             _buildSectionTitle("Account Settings"),
             _buildSettingItem(Icons.person_outline, "Personal Information"),
             _buildSettingItem(Icons.security_outlined, "Privacy & Security"),
             _buildSettingItem(Icons.notifications_none, "Notifications"),
-            const Divider(thickness: 1.2),
+            const Divider(thickness: 1.3, color: Color(0xFF10182F)),
             _buildSectionTitle("Connected Accounts"),
-            _buildConnectedAccount("Google", "Connected", Colors.green),
-            _buildConnectedAccount("LinkedIn", "Connect", Colors.blue),
-            const Divider(thickness: 1.2),
+            _buildConnectedAccount(
+              "Google",
+              "Connected",
+              const Color.fromARGB(255, 12, 129, 16),
+            ),
+            _buildConnectedAccount(
+              "LinkedIn",
+              "Connect",
+              const Color.fromARGB(255, 15, 80, 133),
+            ),
+            const Divider(thickness: 1.3, color: Color(0xFF10182F)),
             _buildSectionTitle("Support & Help"),
             _buildSettingItem(Icons.help_outline, "Help Center"),
             _buildSettingItem(Icons.contact_mail_outlined, "Contact Support"),
-            _buildSettingItem(Icons.description_outlined, "Terms & Privacy Policy"),
+            _buildSettingItem(
+              Icons.description_outlined,
+              "Terms & Privacy Policy",
+            ),
           ],
         ),
       ),
@@ -59,12 +70,12 @@ class SettingsPage extends StatelessWidget {
   Widget _buildUserTile() {
     return ListTile(
       leading: const CircleAvatar(
-        backgroundImage: AssetImage("assets/avatar.png"), // Replace with your asset
+        backgroundImage: AssetImage("assets/img/profile.jpg"),
         radius: 26,
       ),
       title: const Text(
         "Alpha Dog",
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       ),
       subtitle: const Text("alphaD@email.com"),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -82,7 +93,7 @@ class SettingsPage extends StatelessWidget {
         title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.grey,
+          color: Colors.black,
         ),
       ),
     );
@@ -90,8 +101,11 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildSettingItem(IconData icon, String title) {
     return ListTile(
-      leading: Icon(icon, color: Colors.orange),
-      title: Text(title),
+      leading: Icon(icon, color: Colors.black),
+      title: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold), // <-- Bold here
+      ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         // Add navigation if needed
@@ -102,10 +116,18 @@ class SettingsPage extends StatelessWidget {
   Widget _buildConnectedAccount(String platform, String status, Color color) {
     return ListTile(
       leading: _getPlatformIcon(platform),
-      title: Text(platform),
+      title: Text(
+        platform,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ), // <-- Bold platform
+      ),
       trailing: Text(
         status,
-        style: TextStyle(color: color),
+        style: TextStyle(
+          fontWeight: FontWeight.bold, // <-- Bold status
+          color: color,
+        ),
       ),
       onTap: () {
         // Add action for linking/unlinking

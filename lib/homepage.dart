@@ -1,78 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:grad_ready/main.dart';
-import 'homepage.dart'; // Import your homepage.dart file
-import 'profile_page.dart'; // Import your profile page
-import 'settings_page.dart'; // Import your settings page
+import 'package:flutter/services.dart';
+import 'profile_page.dart';
+import 'settings_page.dart';
 
-void main() {
-  runApp(const MyApp());
+Widget build(BuildContext context) {
+  // Set status bar color and icon brightness
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF10182F), // Match header color
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+
+  return const HomePageStateful(); // Use the stateful widget for the homepage
 }
 
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageStateful extends StatefulWidget {
+  const HomePageStateful({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageStateful> createState() => _HomePageStatefulState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1; // Default to 'Home'
-
-late final List<Widget> _pages;
-
-@override
-void initState() {
-  super.initState();
-  _pages = [
-    const ProfilePage(), // Profile Page
-    Container(), // HomePage content
-    const SettingsPage(), // Settings Page
-  ];
-}
+class _HomePageStatefulState extends State<HomePageStateful> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFF6F00), // Orange background
-      body: _currentIndex == 1
-          ? SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildTopBar(),
-                  const SizedBox(height: 16),
-                  _buildWeekTracker(),
-                  const SizedBox(height: 90),
-                  const Center(
-                    child: Text(
-                      "Choose Your Mode:",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  _buildModeSelection(),
-                ],
+      appBar: AppBar(title: const Text('Home Page')),
+      body: const Center(child: Text('Welcome to the Home Page!')),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTopBar(),
+          const SizedBox(height: 16),
+          _buildWeekTracker(),
+          const SizedBox(height: 90),
+          const Center(
+            child: Text(
+              "Choose Your Mode:",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-            )
-          : _pages[_currentIndex], // Display Profile or Settings Page
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index; // Update the selected index
-          });
-        },
-        backgroundColor: const Color(0xFF10182F),
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildModeSelection(),
         ],
       ),
     );
@@ -81,7 +65,7 @@ void initState() {
   Widget _buildTopBar() {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: const Color(0xFF10182F), // Dark blue background
+      color: const Color(0xFF10182F),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -97,7 +81,11 @@ void initState() {
             ),
             child: const Row(
               children: [
-                Icon(Icons.local_fire_department, color: Colors.white, size: 18),
+                Icon(
+                  Icons.local_fire_department,
+                  color: Colors.white,
+                  size: 18,
+                ),
                 SizedBox(width: 6),
                 Text('2 days', style: TextStyle(color: Colors.white)),
               ],
@@ -109,15 +97,15 @@ void initState() {
   }
 
   Widget _buildWeekTracker() {
-    const days = ['o', 'T', 'W', 'T', 'F', 'S', 'S'];
+    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     final icons = [
-      Icons.ac_unit, // Blue snowflake
-      Icons.flash_on, // Yellow lightning
+      Icons.flash_on,
+      Icons.flash_on,
       Icons.flash_on,
       null,
       null,
       null,
-      null
+      null,
     ];
 
     return Container(
@@ -135,11 +123,14 @@ void initState() {
               if (icons[index] != null)
                 Icon(
                   icons[index],
-                  color: icons[index] == Icons.ac_unit ? Colors.blue : Colors.yellow,
+                  color:
+                      icons[index] == Icons.ac_unit
+                          ? Colors.blue
+                          : Colors.yellow,
                 )
               else
                 const Icon(Icons.circle_outlined, color: Colors.grey),
-              const SizedBox(height: 4),
+              const SizedBox(height: 8),
               Text(days[index], style: const TextStyle(color: Colors.white)),
             ],
           );
@@ -154,45 +145,65 @@ void initState() {
       child: Row(
         children: [
           Expanded(
-            child: _buildModeCard("Presentation", "assets/presentation.png"),
+            child: _buildModeCard(
+              "Presentation",
+              imagePath: 'assets/img/presentation.jpg', // Correct image path
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 20),
           Expanded(
-            child: _buildModeCard("Interview", "assets/interview.png"),
+            child: _buildModeCard(
+              "Interview",
+              imagePath: 'assets/img/interviewperson.jpg', // Correct image path
+            ),
           ),
         ],
       ),
     );
   }
 
-Widget _buildModeCard(String title, String imagePath) {
-  return Container(
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: Colors.black,
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: Colors.white, width: 2),
-    ),
-    child: Column(
-      children: [
-        Image.asset(
-          imagePath,
-          height: 80,
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.error, color: Colors.red, size: 80);
-          },
-        ),
-        const SizedBox(height: 8),
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.orange,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+  Widget _buildModeCard(String title, {String? imagePath}) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () {
+          // Your onTap logic here
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Display image as the icon for the mode
+              imagePath != null
+                  ? Image.asset(
+                    imagePath,
+                    height: 80,
+                    width: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.error,
+                        size: 60,
+                        color: Colors.red,
+                      );
+                    },
+                  )
+                  : const Icon(Icons.error, size: 60, color: Colors.red),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
 }
