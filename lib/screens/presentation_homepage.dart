@@ -68,6 +68,14 @@ class PresentationHomePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      _buildOptionButton(
+                        context,
+                        icon: Icons.question_answer,
+                        label: "Interview\nPractice",
+                        onTap: () {
+                          Navigator.pushNamed(context, '/interview');
+                        },
+                      ),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -92,14 +100,6 @@ class PresentationHomePage extends StatelessWidget {
                             label: "Upload File",
                             onTap: () {
                               Navigator.pushNamed(context, '/audio-analysis');
-                            },
-                          ),
-                          _buildOptionButton(
-                            context,
-                            icon: Icons.question_answer,
-                            label: "Interview\nPractice",
-                            onTap: () {
-                              Navigator.pushNamed(context, '/interview');
                             },
                           ),
                         ],
