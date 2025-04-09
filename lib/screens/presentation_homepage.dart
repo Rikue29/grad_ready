@@ -61,7 +61,7 @@ class PresentationHomePage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        "Choose between these 2 options:",
+                        "Choose between these 3 options:",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -92,6 +92,14 @@ class PresentationHomePage extends StatelessWidget {
                             label: "Upload File",
                             onTap: () {
                               Navigator.pushNamed(context, '/audio-analysis');
+                            },
+                          ),
+                          _buildOptionButton(
+                            context,
+                            icon: Icons.question_answer,
+                            label: "Interview\nPractice",
+                            onTap: () {
+                              Navigator.pushNamed(context, '/interview');
                             },
                           ),
                         ],

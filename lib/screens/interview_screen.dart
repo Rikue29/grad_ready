@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import '../widgets/custom_navbar.dart';
-import '../services/stt_service.dart';
 import '../services/gemini_service.dart';
+import '../services/speech_recognition_service.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class InterviewScreen extends StatefulWidget {
   const InterviewScreen({super.key});
@@ -14,13 +12,27 @@ class InterviewScreen extends StatefulWidget {
 }
 
 class _InterviewScreenState extends State<InterviewScreen> {
-  final recorder = AudioRecorder();
   final TextEditingController roleController = TextEditingController();
-  bool isRecording = false;
-  String? recordedFilePath;
-  String aiFeedback = 'Your AI review will appear here after recording.';
+  final _speechService = SpeechRecognitionService();
   String currentQuestion = 'Enter a job role to get started.';
   String jobRole = '';
+  String _transcriptText = '';
+  bool _isInitialized = false;
+  bool _isAnalyzing = false;
+  String aiFeedback = 'Your AI review will appear here after recording.';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeSpeech();
+  }
+
+  Future<void> _initializeSpeech() async {
+    final available = await _speechService.initialize();
+    setState(() {
+      _isInitialized = available;
+    });
+  }
 
   Future<void> _loadInterviewQuestion() async {
     if (jobRole.isEmpty) {
@@ -63,82 +75,77 @@ class _InterviewScreenState extends State<InterviewScreen> {
     );
   }
 
-  Future<void> _startRecording() async {
-    print('[DEBUG] Requesting mic permission...');
-    if (await recorder.hasPermission()) {
-      print('[DEBUG] Permission granted.');
-      final dir = await getApplicationDocumentsDirectory();
-      final path = '${dir.path}/response.wav';
+  Future<void> _analyzeTranscript() async {
+    if (_transcriptText.isEmpty) {
+      return;
+    }
 
-      print('[DEBUG] Starting recording with mono config at: $path');
-      await recorder.start(
-        const RecordConfig(
-          encoder: AudioEncoder.flac,
-          sampleRate: 16000,
-          bitRate: 128000,
-          numChannels: 1,
-        ),
-        path: path,
-      );
+    setState(() {
+      _isAnalyzing = true;
+      aiFeedback = 'Analyzing your response...';
+    });
 
+    try {
+      final feedback = await GeminiService.getImprovementFeedback(_transcriptText);
       setState(() {
-        isRecording = true;
-        recordedFilePath = path;
+        aiFeedback = feedback ?? 'No feedback available.';
       });
-    } else {
-      print('[DEBUG] Microphone permission denied.');
+    } catch (e) {
+      setState(() {
+        aiFeedback = 'Analysis failed: $e';
+      });
+    } finally {
+      setState(() {
+        _isAnalyzing = false;
+      });
     }
   }
 
-  Future<void> _stopRecording() async {
-    print('[DEBUG] Stopping recording...');
-    await recorder.stop();
-    setState(() {
-      isRecording = false;
-      aiFeedback = 'Analyzing...';
-    });
-
-    if (recordedFilePath != null) {
-      final file = File(recordedFilePath!);
-      print('[DEBUG] File exists: ${file.existsSync()}');
-      print('[DEBUG] File path: $recordedFilePath');
-      print('[DEBUG] File size: ${file.lengthSync()} bytes');
-
-      final transcript = await STTService.transcribeAudio(file);
-      print('[DEBUG] Transcribed text: $transcript');
-
-      if (transcript != null && transcript.isNotEmpty) {
-        final feedback = await GeminiService.getImprovementFeedback(transcript);
-        print('[DEBUG] Gemini Feedback: $feedback');
-
-        setState(() {
-          aiFeedback = feedback ?? 'No feedback available.';
-        });
-      } else {
-        setState(() {
-          aiFeedback = 'Sorry, no speech detected.';
-        });
-        print('[DEBUG] No transcript returned.');
-      }
-    } else {
-      setState(() {
-        aiFeedback = 'No audio file found.';
-      });
-      print('[DEBUG] No file path set.');
+  void _listen() async {
+    if (!_isInitialized) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Speech recognition not available'),
+        ),
+      );
+      return;
     }
+
+    if (!_speechService.isListening) {
+      setState(() {
+        _transcriptText = '';
+        aiFeedback = 'Listening...';
+      });
+      await _speechService.startListening(
+        onTranscript: (text) {
+          setState(() {
+            _transcriptText = text;
+          });
+        },
+        onConfidenceUpdate: (confidence) {
+          // You can use confidence score if needed
+        },
+      );
+    } else {
+      await _speechService.stopListening();
+      // Analyze the transcript after stopping
+      await _analyzeTranscript();
+    }
+    setState(() {}); // Update UI to reflect listening state
   }
 
   void _nextQuestion() {
     setState(() {
       currentQuestion = 'Loading next question...';
       aiFeedback = 'Your AI review will appear here after recording.';
+      _transcriptText = '';
     });
     _loadInterviewQuestion();
   }
 
   @override
   void dispose() {
-    recorder.dispose();
+    _speechService.dispose();
     roleController.dispose();
     super.dispose();
   }
@@ -199,46 +206,44 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 child: const Text('Next Question'),
               ),
               const SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: isRecording ? _stopRecording : _startRecording,
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: isRecording ? Colors.red : Colors.orange,
-                    child: Icon(
-                      isRecording ? Icons.stop : Icons.mic,
-                      color: Colors.black,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Tap the mic icon to start recording your response.',
+              Text(
+                _transcriptText.isEmpty ? 'Press the mic button and start speaking'
+                    : _transcriptText,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black54, fontSize: 14),
-              ),
-              const SizedBox(height: 30),
-              const Text(
-                'AI Feedback:',
-                style: TextStyle(color: Colors.black87, fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      aiFeedback,
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
                 ),
+              ),
+              const SizedBox(height: 20),
+              AvatarGlow(
+                animate: _speechService.isListening,
+                glowColor: Theme.of(context).primaryColor,
+                endRadius: 75.0,
+                duration: const Duration(milliseconds: 2000),
+                repeatPauseDuration: const Duration(milliseconds: 100),
+                repeat: true,
+                child: FloatingActionButton(
+                  onPressed: _listen,
+                  child: Icon(_speechService.isListening ? Icons.mic : Icons.mic_none),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: _isAnalyzing
+                    ? const Center(child: CircularProgressIndicator())
+                    : Text(
+                        aiFeedback,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
               ),
             ],
           ),

@@ -29,6 +29,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Add these lines for audio recording and playback
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86_64"))
+        }
     }
 
     buildTypes {
@@ -38,6 +43,19 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    // Add this for audio recording and playback
+    packagingOptions {
+        jniLibs {
+            pickFirsts.add("lib/**/libc++_shared.so")
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("com.google.android.gms:play-services-base:18.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }
 
 flutter {
