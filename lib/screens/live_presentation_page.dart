@@ -119,7 +119,7 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
         backgroundColor: const Color(0xFF1C2632),
         title: const Text(
           'Live Presentation',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontFamily:'Poppins', fontWeight: FontWeight.bold, color: Colors.white),
         ),
         elevation: 0,
         leading: IconButton(

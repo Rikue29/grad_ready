@@ -5,15 +5,10 @@ import 'screens/login.dart';
 import 'screens/presentation_homepage.dart';
 import 'screens/gemini_test_page.dart';
 import 'screens/audio_analysis_page.dart';
-import 'screens/interview_screen.dart';
 import 'services/env_config_service.dart';
 import 'package:gradready_interview/screens/interview_role.dart';
-import 'screens/presentation_homepage.dart';
-import 'screens/gemini_test_page.dart';
-import 'services/env_config_service.dart';
-import 'screens/audio_analysis_page.dart'; // added import statement
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'screens/interview_mock.dart';
+import 'package:google_fonts/google_fonts.dart';
+// added import statement
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +27,8 @@ class MyApp extends StatelessWidget {
       title: 'GradReady',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFFFF6B00),
-        scaffoldBackgroundColor: const Color(0xFF1C2632),
+        primarySwatch: Colors.orange,
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       home: LoginPage(),
       routes: {

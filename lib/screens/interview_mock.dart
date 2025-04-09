@@ -124,12 +124,12 @@ class _InterviewMockScreenState extends State<InterviewMockScreen> {
             child: Image.asset(
               'assets/images/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity (1.0 for solid white)
+              color: Colors.white.withOpacity(0.2), // Adjust opacity
               colorBlendMode: BlendMode.srcOut, // Blend mode to apply the white color
             ),
           ),
           // Main content
-          Padding(
+          SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -167,23 +167,28 @@ class _InterviewMockScreenState extends State<InterviewMockScreen> {
                           textAlign: TextAlign.left,
                         ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
           // Centered microphone button
-          Center(
-            child: SizedBox(
-              width: 120, // Larger button size
-              height: 120,
-              child: FloatingActionButton(
-                onPressed: _listen,
-                backgroundColor: Colors.white, // Button color
-                child: Icon(
-                  _speechService.isListening ? Icons.mic : Icons.mic_none,
-                  color: Colors.red, // Icon color
-                  size: 50, // Larger icon size
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: FloatingActionButton(
+                  onPressed: _listen,
+                  backgroundColor: Colors.white,
+                  elevation: 10,
+                  child: Icon(
+                    _speechService.isListening ? Icons.mic : Icons.mic_none,
+                    color: Colors.red,
+                    size: 40,
+                  ),
                 ),
-                elevation: 10, // Added shadow
               ),
             ),
           ),

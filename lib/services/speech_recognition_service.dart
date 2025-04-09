@@ -92,7 +92,7 @@ class SpeechRecognitionService {
             // Handle the transcript based on whether it's final or interim
             if (result.isFinal) {
               // For final results, append to the complete transcript
-              _completeTranscript += ' ' + transcript;
+              _completeTranscript += ' $transcript';
               _lastInterimResult = '';
             } else {
               // For interim results, store temporarily
@@ -100,7 +100,7 @@ class SpeechRecognitionService {
             }
 
             // Combine complete transcript with current interim result
-            final fullTranscript = (_completeTranscript + ' ' + _lastInterimResult).trim();
+            final fullTranscript = ('$_completeTranscript $_lastInterimResult').trim();
             _onTranscript?.call(fullTranscript);
 
             // Update confidence if available
@@ -131,7 +131,7 @@ class SpeechRecognitionService {
       
       // If there's any interim result when stopping, add it to complete transcript
       if (_lastInterimResult.isNotEmpty) {
-        _completeTranscript += ' ' + _lastInterimResult;
+        _completeTranscript += ' $_lastInterimResult';
         _lastInterimResult = '';
         _onTranscript?.call(_completeTranscript.trim());
       }
