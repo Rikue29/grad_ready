@@ -19,11 +19,14 @@ class _InterviewRoleScreenState extends State<InterviewRoleScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFF6B00), // Orange background
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1C2632),
         title: const Text(
           'Mock Interview',
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
-        backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
