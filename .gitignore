@@ -48,3 +48,4 @@ app.*.map.json
 .env
 lib/config/api_keys.dart
 assets/service-account.json
+assets/keys/service-speech-to-text.json
