@@ -3,6 +3,9 @@ buildscript {
         google()
         mavenCentral()
     }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.10")
+    }
 }
 
 allprojects {
@@ -28,16 +31,6 @@ subprojects {
 
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
-}
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.google.gms:google-services:4.3.10")
-    }
 }
 
 // Remove the plugins block since we'll apply the plugin in the app module instead

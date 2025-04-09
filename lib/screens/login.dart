@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gradready_interview/screens/presentation_homepage.dart';
 import 'signup.dart';
-import 'home.dart';
 import '../services/firebase_auth_service.dart';
 
 class LoginPage extends StatelessWidget {
@@ -16,10 +16,10 @@ class LoginPage extends StatelessWidget {
         _emailController.text,
         _passwordController.text,
       );
-      // Navigate to HomePage if login is successful
+      // Navigate to PresentationHomePage if login is successful
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const PresentationHomePage()),
       );
     } catch (e) {
       print('Failed to sign in: $e');

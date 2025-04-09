@@ -290,12 +290,14 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Widget _buildScoreCards() {
+    if (_analysis == null) return const SizedBox();
+    
     return Row(
       children: [
         Expanded(
           child: _buildScoreCard(
             'Clarity',
-            _analysis!['clarity_score'],
+            _analysis!['clarity_score'] ?? 0,
             Icons.volume_up,
           ),
         ),
@@ -303,7 +305,7 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
         Expanded(
           child: _buildScoreCard(
             'Confidence',
-            _analysis!['confidence_score'],
+            _analysis!['confidence_score'] ?? 0,
             Icons.psychology,
           ),
         ),
@@ -311,7 +313,8 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
     );
   }
 
-  Widget _buildScoreCard(String label, double score, IconData icon) {
+  Widget _buildScoreCard(String label, dynamic score, IconData icon) {
+    final double scoreValue = score is int ? score.toDouble() : score;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -320,39 +323,23 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(icon, color: const Color(0xFFFF6B00)),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: const Color(0xFFFF6B00),
-                    width: 2,
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    '${(score * 100).round()}',
-                    style: const TextStyle(
-                      color: Color(0xFFFF6B00),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          Icon(icon, color: Colors.white, size: 32),
           const SizedBox(height: 8),
           Text(
             label,
             style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${scoreValue.toStringAsFixed(1)}%',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -361,8 +348,10 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Widget _buildFillerWords() {
-    final fillerWordsMap = _analysis!['filler_words'] as Map<String, dynamic>;
-    if (fillerWordsMap.isEmpty) return const SizedBox.shrink();
+    if (_analysis == null) return const SizedBox();
+    
+    final fillerWordsMap = _analysis!['filler_words'] as Map<String, dynamic>?;
+    if (fillerWordsMap == null || fillerWordsMap.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,13 +384,17 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Widget _buildPacingInfo() {
+    if (_analysis == null) return const SizedBox();
+    
+    final pacingFeedback = _analysis!['pacing_feedback'] as String?;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle('Pacing'),
         const SizedBox(height: 12),
         Text(
-          _analysis!['pacing_feedback'] as String,
+          pacingFeedback ?? 'No pacing feedback available',
           style: TextStyle(
             color: Colors.white.withOpacity(0.9),
             fontSize: 15,
@@ -413,7 +406,11 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Widget _buildKeyPoints() {
-    final points = _analysis!['key_points'] as List<dynamic>;
+    if (_analysis == null) return const SizedBox();
+    
+    final points = _analysis!['key_points'] as List<dynamic>?;
+    if (points == null || points.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -425,7 +422,11 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Widget _buildImprovements() {
-    final improvements = _analysis!['improvements'] as List<dynamic>;
+    if (_analysis == null) return const SizedBox();
+    
+    final improvements = _analysis!['improvements'] as List<dynamic>?;
+    if (improvements == null || improvements.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

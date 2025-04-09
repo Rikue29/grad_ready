@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/login.dart'; // Import your login page
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'screens/login.dart';
 import 'screens/presentation_homepage.dart';
 import 'screens/gemini_test_page.dart';
-import 'services/env_config_service.dart';
 import 'screens/audio_analysis_page.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/interview_screen.dart';
+import 'services/env_config_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await EnvConfigService.initialize();
+  await dotenv.load();
 
   runApp(const MyApp());
 }
@@ -27,8 +29,10 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFFFF6B00),
         scaffoldBackgroundColor: const Color(0xFF1C2632),
       ),
-      home: const PresentationHomePage(),
+      home: LoginPage(),
       routes: {
+        '/login': (context) => LoginPage(),
+        '/presentation': (context) => const PresentationHomePage(),
         '/gemini-test': (context) => const GeminiTestPage(),
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewScreen(),
