@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gradready_interview/screens/profile_page.dart';
+import 'package:gradready_interview/screens/settings_page.dart';
 import 'package:gradready_interview/screens/splash_screen.dart';
-import 'screens/homepage.dart'; // Ensure this file exists and is correct
+// Ensure this file exists and is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login.dart';
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
       routes: {
         '/login': (context) => LoginPage(),
         '/presentation': (context) => const PresentationHomePage(),
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
         '/audio-analysis': (context) => const AudioAnalysisPage(),
         '/interview': (context) => const InterviewRoleScreen(),
         '/splashpage': (context) => const SplashScreen(),
+        '/profile': (context) => const ProfilePage(),
+        '/settings': (context) => const SettingsPage(),
       },
     );
   }

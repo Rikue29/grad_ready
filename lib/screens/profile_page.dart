@@ -105,11 +105,11 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildStatsRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           _StatItem(title: '24', label: 'Interviews'),
           _StatItem(title: '18', label: 'Presentations'),
           _StatItem(title: '92%', label: 'Fluency Rate'),
@@ -146,25 +146,23 @@ class ProfilePage extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children:
-                skills.map((skill) {
-                  final isOrange =
-                      skill == 'Leadership' || skill == 'Team Management';
-                  return Chip(
-                    backgroundColor:
-                        isOrange ? Colors.orange : Colors.blueGrey[100],
-                    label: Text(
-                      skill,
-                      style: TextStyle(
-                        color:
-                            isOrange
-                                ? Colors.white
-                                : const Color.fromARGB(248, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                }).toList(),
+            children: skills.map((skill) {
+              final isOrange =
+                  skill == 'Leadership' || skill == 'Team Management';
+              return Chip(
+                backgroundColor:
+                    isOrange ? Colors.orange : Colors.blueGrey[100],
+                label: Text(
+                  skill,
+                  style: TextStyle(
+                    color: isOrange
+                        ? Colors.white
+                        : const Color.fromARGB(248, 0, 0, 0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

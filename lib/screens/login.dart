@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gradready_interview/screens/homepage.dart';
 import 'package:gradready_interview/screens/presentation_homepage.dart';
 import 'signup.dart';
 import '../services/firebase_auth_service.dart';
@@ -39,8 +38,10 @@ class LoginPage extends StatelessWidget {
             child: Image.asset(
               'assets/images/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity (1.0 for solid white)
-              colorBlendMode: BlendMode.srcOut, // Blend mode to apply the white color
+              color: Colors.white
+                  .withOpacity(0.2), // Adjust opacity (1.0 for solid white)
+              colorBlendMode:
+                  BlendMode.srcOut, // Blend mode to apply the white color
             ),
           ),
           Padding(

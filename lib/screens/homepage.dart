@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'profile_page.dart';
 import 'settings_page.dart';
 import '../widgets/custom_navbar.dart';
@@ -15,8 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const HomePageStateful(),
+    return const MaterialApp(
+      home: HomePageStateful(),
     );
   }
 }
@@ -195,7 +194,8 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildModeCard(String title, {required String imagePath, required BuildContext context}) {
+  Widget _buildModeCard(String title,
+      {required String imagePath, required BuildContext context}) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -207,19 +207,22 @@ class HomeContent extends StatelessWidget {
           if (title == "Presentation") {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const PresentationHomePage()),
+              MaterialPageRoute(
+                  builder: (context) => const PresentationHomePage()),
             );
           } else {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const InterviewRoleScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const InterviewRoleScreen()),
             );
           }
         },
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               child: Image.asset(
                 imagePath,
                 height: 150,
