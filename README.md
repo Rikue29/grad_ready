@@ -20,7 +20,7 @@ Powered by:
 - Flutter SDK 3.7+
 - Android Studio / VS Code
 - A valid Google API service account (for Speech-to-Text)
-- A Gemini MakerSuite API key
+- A Gemini API key from Google Ai Studio
 
 ---
 
@@ -39,16 +39,16 @@ GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### 3. Add your Google Speech-to-Text service account key
-Place your `service-speech-to-text.json` in:
+Place your `service-account.json` in:
 ```
-assets/keys/service-speech-to-text.json
+assets/service-account.json
 ```
 
 Update `pubspec.yaml`:
 ```yaml
 flutter:
   assets:
-    - assets/keys/service-speech-to-text.json
+    - assets/service-account.json
 ```
 
 ### 4. Install dependencies
@@ -74,7 +74,7 @@ flutter run
 1. Go to https://console.cloud.google.com/
 2. Create a project + enable Speech-to-Text API
 3. Create a **Service Account** and download the JSON key
-4. Save it as `assets/keys/service-speech-to-text.json`
+4. Save it as `assets/service-account.json`
 
 ---
 
