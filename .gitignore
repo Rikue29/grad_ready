@@ -49,3 +49,6 @@ app.*.map.json
 lib/config/api_keys.dart
 assets/service-account.json
 assets/keys/service-speech-to-text.json
+
+# VSCode
+.vscode/
