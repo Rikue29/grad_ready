@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/gemini_service.dart';
 import '../services/speech_recognition_service.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class InterviewMockScreen extends StatefulWidget {
   final String jobRole;
@@ -18,12 +19,20 @@ class _InterviewMockScreenState extends State<InterviewMockScreen> {
   bool _isInitialized = false;
   bool _isAnalyzing = false;
   String aiFeedback = 'Your AI review will appear here after you answer.';
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
     _loadInterviewQuestion();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _speechService.dispose();
+    super.dispose();
   }
 
   Future<void> _initializeSpeech() async {
@@ -53,10 +62,18 @@ class _InterviewMockScreenState extends State<InterviewMockScreen> {
     });
 
     try {
-      final feedback = await GeminiService.getImprovementFeedback(_transcriptText);
+      final feedback =
+          await GeminiService.getImprovementFeedback(_transcriptText);
       setState(() {
         aiFeedback = feedback ?? 'No feedback available.';
       });
+      // Scroll to show feedback
+      await Future.delayed(const Duration(milliseconds: 300));
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
     } catch (e) {
       setState(() {
         aiFeedback = 'Analysis failed: $e';
@@ -98,98 +115,234 @@ class _InterviewMockScreenState extends State<InterviewMockScreen> {
   }
 
   @override
-  void dispose() {
-    _speechService.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFF6B00), // System-wide orange color
+      backgroundColor:
+          const Color(0xFF1C2632), // Dark background like LivePresentationPage
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1C2632),
         title: const Text(
           'Mock Interview',
-          style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.psychology, color: Colors.white),
+            tooltip: 'Gemini AI Test',
+            onPressed: () {
+              Navigator.pushNamed(context, '/gemini-test');
+            },
+          ),
+        ],
       ),
-      body: Stack(
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 24),
+              _buildQuestionCard(),
+              const SizedBox(height: 24),
+              _buildTranscriptCard(),
+              const SizedBox(height: 24),
+              if (_isAnalyzing)
+                const Center(
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Color(0xFFFF6B00)),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Analyzing your response...',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+              _buildFeedbackCard(),
+              const SizedBox(height: 100), // Space for the floating button
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _buildMicButton(),
+    );
+  }
+
+  Widget _buildQuestionCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFF6B00).withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFFF6B00).withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Background image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/texture.png',
-              fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity
-              colorBlendMode: BlendMode.srcOut, // Blend mode to apply the white color
+          const Text(
+            'Question',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          // Main content
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  currentQuestion.isEmpty
-                      ? 'Loading question for ${widget.jobRole}...'
-                      : currentQuestion,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white, // Main text color
-                    fontFamily: 'Poppins',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                  ),
+          const SizedBox(height: 12),
+          Text(
+            currentQuestion.isEmpty
+                ? 'Loading question for ${widget.jobRole}...'
+                : currentQuestion,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTranscriptCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFFF6B00).withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Your Answer',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            _transcriptText.isEmpty
+                ? 'Press the microphone button and start speaking'
+                : _transcriptText,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeedbackCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'AI Feedback',
+            style: TextStyle(
+              color: Color(0xFFFF6B00),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            aiFeedback,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMicButton() {
+    final isListening = _speechService.isListening;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2A3543),
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200]?.withOpacity(0.9), // Slight transparency
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: _isAnalyzing
-                      ? const Center(child: CircularProgressIndicator())
-                      : Text(
-                          aiFeedback,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                ),
-                const SizedBox(height: 20),
               ],
             ),
-          ),
-          // Centered microphone button
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: SizedBox(
-                width: 80,
-                height: 80,
-                child: FloatingActionButton(
-                  onPressed: _listen,
-                  backgroundColor: Colors.white,
-                  elevation: 10,
-                  child: Icon(
-                    _speechService.isListening ? Icons.mic : Icons.mic_none,
-                    color: Colors.red,
-                    size: 40,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isListening ? 'Tap to stop' : 'Tap to speak',
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
                   ),
                 ),
-              ),
+                const SizedBox(width: 16),
+                AvatarGlow(
+                  endRadius: 32,
+                  animate: isListening,
+                  duration: const Duration(milliseconds: 2000),
+                  glowColor: const Color(0xFFFF6B00),
+                  child: FloatingActionButton(
+                    onPressed: _listen,
+                    backgroundColor: isListening
+                        ? const Color(0xFFFF6B00)
+                        : const Color(0xFF2A3543),
+                    elevation: 0,
+                    child: Icon(
+                      isListening ? Icons.mic : Icons.mic_none,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

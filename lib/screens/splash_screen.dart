@@ -7,7 +7,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFF6D00), // Orange background color
+      backgroundColor:
+          const Color.fromARGB(255, 249, 115, 22), // Orange background color
       body: Stack(
         children: [
           // Background texture image
@@ -15,8 +16,7 @@ class SplashScreen extends StatelessWidget {
             child: Image.asset(
               'assets/img/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity
-              colorBlendMode: BlendMode.srcOut, // Blend mode for white overlay
+              color: Colors.black.withOpacity(0.1), // Adjust opacity
             ),
           ),
           // Center the content

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gradready_interview/screens/homepage.dart';
 import 'package:gradready_interview/screens/profile_page.dart';
 import 'package:gradready_interview/screens/settings_page.dart';
 import 'package:gradready_interview/screens/splash_screen.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/splashpage': (context) => const SplashScreen(),
         '/profile': (context) => const ProfilePage(),
         '/settings': (context) => const SettingsPage(),
+        '/home': (context) => const HomePageStateful(),
       },
     );
   }

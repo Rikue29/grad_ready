@@ -40,8 +40,7 @@ class SignupPage extends StatelessWidget {
             child: Image.asset(
               'assets/images/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2), // Adjust opacity
-              colorBlendMode: BlendMode.srcOut, // Apply white color
+              color: Colors.black.withOpacity(0.1), // Adjust opacity
             ),
           ),
           Padding(

@@ -46,7 +46,8 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
   }
 
   Future<void> _analyzeTranscript() async {
-    if (_transcriptText.isEmpty || _transcriptText == 'Press the microphone button and start speaking') {
+    if (_transcriptText.isEmpty ||
+        _transcriptText == 'Press the microphone button and start speaking') {
       return;
     }
 
@@ -118,14 +119,28 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C2632),
         title: const Text(
-          'Live Presentation',
-          style: TextStyle(fontFamily:'Poppins', fontWeight: FontWeight.bold, color: Colors.white),
+          "Live Presentation",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Change back button color to white
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.psychology, color: Colors.white),
+            tooltip: 'Gemini AI Test',
+            onPressed: () {
+              Navigator.pushNamed(context, '/gemini-test');
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         controller: _scrollController,
@@ -141,7 +156,8 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
                 const Column(
                   children: [
                     CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B00)),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFFFF6B00)),
                     ),
                     SizedBox(height: 16),
                     Text(
@@ -236,7 +252,9 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
                   glowColor: const Color(0xFFFF6B00),
                   child: FloatingActionButton(
                     onPressed: _listen,
-                    backgroundColor: isListening ? const Color(0xFFFF6B00) : const Color(0xFF2A3543),
+                    backgroundColor: isListening
+                        ? const Color(0xFFFF6B00)
+                        : const Color(0xFF2A3543),
                     elevation: 0,
                     child: Icon(
                       isListening ? Icons.mic : Icons.mic_none,
@@ -291,7 +309,7 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
 
   Widget _buildScoreCards() {
     if (_analysis == null) return const SizedBox();
-    
+
     return Row(
       children: [
         Expanded(
@@ -349,9 +367,11 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
 
   Widget _buildFillerWords() {
     if (_analysis == null) return const SizedBox();
-    
+
     final fillerWordsMap = _analysis!['filler_words'] as Map<String, dynamic>?;
-    if (fillerWordsMap == null || fillerWordsMap.isEmpty) return const SizedBox.shrink();
+    if (fillerWordsMap == null || fillerWordsMap.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,9 +405,9 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
 
   Widget _buildPacingInfo() {
     if (_analysis == null) return const SizedBox();
-    
+
     final pacingFeedback = _analysis!['pacing_feedback'] as String?;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -407,7 +427,7 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
 
   Widget _buildKeyPoints() {
     if (_analysis == null) return const SizedBox();
-    
+
     final points = _analysis!['key_points'] as List<dynamic>?;
     if (points == null || points.isEmpty) return const SizedBox.shrink();
 
@@ -423,16 +443,19 @@ class _LivePresentationPageState extends State<LivePresentationPage> {
 
   Widget _buildImprovements() {
     if (_analysis == null) return const SizedBox();
-    
+
     final improvements = _analysis!['improvements'] as List<dynamic>?;
-    if (improvements == null || improvements.isEmpty) return const SizedBox.shrink();
+    if (improvements == null || improvements.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle('Suggested Improvements'),
         const SizedBox(height: 12),
-        ...improvements.map((improvement) => _buildBulletPoint(improvement.toString())),
+        ...improvements
+            .map((improvement) => _buildBulletPoint(improvement.toString())),
       ],
     );
   }

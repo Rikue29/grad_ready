@@ -12,9 +12,22 @@ class _AudioAnalysisPageState extends State<AudioAnalysisPage> {
   bool _isAnalyzing = false;
   String? _mockFileName;
 
+  @override
+  void initState() {
+    super.initState();
+    // Add initial AI message requesting audio file
+    _messages.add(
+      ChatMessage(
+        content:
+            "Hello! Please upload an audio file of your presentation or interview",
+        isUser: false,
+      ),
+    );
+  }
+
   Future<void> _simulateFileUpload() async {
     setState(() => _isAnalyzing = true);
-    
+
     // Simulate file selection
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
@@ -61,7 +74,8 @@ class _AudioAnalysisPageState extends State<AudioAnalysisPage> {
         'like': 7,
         'you know': 4,
       },
-      'pacing_feedback': 'Your speaking pace is good, averaging 130 words per minute. The pace varies appropriately between technical explanations and key points.',
+      'pacing_feedback':
+          'Your speaking pace is good, averaging 130 words per minute. The pace varies appropriately between technical explanations and key points.',
       'key_points': [
         'Clear introduction of the project goals',
         'Detailed explanation of technical architecture',
@@ -116,10 +130,18 @@ ${(analysis['improvements'] as List).map((point) => '• $point').join('\n')}
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C2632),
         title: const Text(
-          'Audio Analysis',
-          style: TextStyle(color: Colors.white),
+          "Audio Analysis",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         elevation: 0,
+        centerTitle: true,
+        iconTheme:
+            const IconThemeData(color: Colors.white), // Make back button white
       ),
       body: Column(
         children: [
@@ -157,13 +179,16 @@ ${(analysis['improvements'] as List).map((point) => '• $point').join('\n')}
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         decoration: BoxDecoration(
-          color: message.isUser ? const Color(0xFFFF6B00) : Colors.white.withOpacity(0.1),
+          color: message.isUser
+              ? const Color(0xFFFF6B00)
+              : Colors.white.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           message.content,
           style: TextStyle(
-            color: message.isUser ? Colors.white : Colors.white.withOpacity(0.9),
+            // Change AI message color to orange
+            color: message.isUser ? Colors.white : const Color(0xFFFF6B00),
             fontSize: 16,
           ),
         ),

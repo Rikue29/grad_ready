@@ -1,0 +1,148 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "$RPMNTT4",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RPMNTT4",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "$RPMNTT4 (profile mode)",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RPMNTT4",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "$RPMNTT4 (release mode)",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RPMNTT4",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "$RTI9MPY",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RTI9MPY",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "$RTI9MPY (profile mode)",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RTI9MPY",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "$RTI9MPY (release mode)",
+            "cwd": "$Recycle.Bin\\S-1-5-21-4053625831-2339358619-2411311106-1001\\$RTI9MPY",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "first_project",
+            "cwd": "Mine\\Degree\\StudioProjects\\first_project",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "first_project (profile mode)",
+            "cwd": "Mine\\Degree\\StudioProjects\\first_project",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "first_project (release mode)",
+            "cwd": "Mine\\Degree\\StudioProjects\\first_project",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "fluter_app_testing",
+            "cwd": "Mine\\Degree\\StudioProjects\\fluter_app_testing",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "fluter_app_testing (profile mode)",
+            "cwd": "Mine\\Degree\\StudioProjects\\fluter_app_testing",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "fluter_app_testing (release mode)",
+            "cwd": "Mine\\Degree\\StudioProjects\\fluter_app_testing",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flutter_app_testing",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\flutter_app_testing",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter_app_testing (profile mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\flutter_app_testing",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter_app_testing (release mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\flutter_app_testing",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Lab_5",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_5",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Lab_5 (profile mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_5",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Lab_5 (release mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_5",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Lab_Test_SSE3401",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_Test_SSE3401",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Lab_Test_SSE3401 (profile mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_Test_SSE3401",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Lab_Test_SSE3401 (release mode)",
+            "cwd": "Users\\NUR AKMAL\\StudioProjects\\Lab_Test_SSE3401",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

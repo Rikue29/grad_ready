@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'gcp_test_page.dart';
 import 'live_presentation_page.dart';
-import 'profile_page.dart';
-import 'settings_page.dart';
 import '../widgets/custom_navbar.dart';
 
 class PresentationHomePage extends StatelessWidget {
@@ -13,7 +11,7 @@ class PresentationHomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFF6B00), // Orange background
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFF6B00),
+        backgroundColor: const Color(0xFF1C2632),
         title: const Text(
           "GradReady",
           style: TextStyle(
@@ -51,7 +49,7 @@ class PresentationHomePage extends StatelessWidget {
             child: Image.asset(
               'assets/images/texture.png',
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.1), // Adjust opacity
               colorBlendMode: BlendMode.srcOut,
             ),
           ),
@@ -119,13 +117,14 @@ class PresentationHomePage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: CustomNavBar(
-        currentIndex: 1, // Set to 1 as this is the Presentation Homepage
+        currentIndex: 1, // This is the Presentation Homepage
         onTap: (index) {
           if (index == 0) {
             Navigator.pushNamed(
                 context, '/profile'); // Navigate to Profile Page
           } else if (index == 1) {
-            // Stay on the current page
+            // Already on presentation page, navigate to the actual home page
+            Navigator.pushReplacementNamed(context, '/home');
           } else if (index == 2) {
             Navigator.pushNamed(
                 context, '/settings'); // Navigate to Settings Page

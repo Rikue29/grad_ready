@@ -42,6 +42,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   googleapis: ^14.0.0
   google_fonts: ^6.2.1
+  flutter_staggered_animations: ^1.1.1
 
   http: any
   googleapis_auth: any
@@ -102,4 +103,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-packagefl
+  # see https://flutter.dev/to/font-from-package
