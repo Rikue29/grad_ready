@@ -174,9 +174,9 @@ If the app doesn't pick up your microphone:
 </div>
 
 <div align="center">
-  <h3>Main Features</h3>
+  <h3>Main Screen</h3>
   <img src="assets/screenshots/Homepage.png" alt="Home Page" width="250">
-  <img src="assets/screenshots/PresentationHomepage.png" alt="Presentation Homepage" width="250">
+  <img src="assets/screenshots/SettingsPage.png" alt="Settings Page" width="250">
   <img src="assets/screenshots/ProfilePage.png" alt="Profile Page" width="250">
 </div>
 
@@ -189,6 +189,8 @@ If the app doesn't pick up your microphone:
 
 <div align="center">
   <h3>Presentation Features</h3>
+  <img src="assets/screenshots/PresentationHomepage.png" alt="Presentation Homepage"
+   width="250">
   <img src="assets/screenshots/LivePresentationSpeech.png" alt="Live Presentation Speech" width="250">
   <img src="assets/screenshots/LivePresentationAnalysis1.png" alt="Live Presentation Analysis 1" width="250">
   <img src="assets/screenshots/LivePresentationAnalysis2.png" alt="Live Presentation Analysis 2" width="250">
@@ -197,11 +199,6 @@ If the app doesn't pick up your microphone:
 <div align="center">
   <h3>Audio Analysis</h3>
   <img src="assets/screenshots/AudioAnalysis.png" alt="Audio Analysis" width="250">
-</div>
-
-<div align="center">
-  <h3>Settings</h3>
-  <img src="assets/screenshots/SettingsPage.png" alt="Settings Page" width="250">
 </div>
 
 ## 🧑‍💻 Contributors
