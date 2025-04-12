@@ -3,7 +3,6 @@ import 'package:gradready_interview/screens/homepage.dart';
 import 'package:gradready_interview/screens/profile_page.dart';
 import 'package:gradready_interview/screens/settings_page.dart';
 import 'package:gradready_interview/screens/splash_screen.dart';
-// Ensure this file exists and is correct
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/login.dart';
@@ -13,7 +12,6 @@ import 'screens/audio_analysis_page.dart';
 import 'services/env_config_service.dart';
 import 'package:gradready_interview/screens/interview_role.dart';
 import 'package:google_fonts/google_fonts.dart';
-// added import statement
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

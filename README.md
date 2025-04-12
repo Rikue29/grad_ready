@@ -1,6 +1,7 @@
 # 🎙️ GradReady Interview App
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Powered by Google Cloud](https://img.shields.io/badge/Powered%20by-Google%20Cloud-blue?style=for-the-badge&logo=Google%20Cloud)](https://cloud.google.com)
+[![Powered by Gemini](https://img.shields.io/badge/Powered%20by-Gemini-red?style=for-the-badge&logo=Google)](https://makersuite.google.com)
 
 An AI-powered mobile app built with Flutter that lets users practice interview questions using real-time voice transcription and AI-generated feedback.
 
@@ -65,18 +66,96 @@ flutter pub get
 flutter run
 ```
 
+## 🔥 Firebase Setup
+
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Create a new project or select an existing one
+3. Add your app to the Firebase project:
+   - For Android: Register your app with your package name
+   - For iOS: Register your app with your bundle ID
+4. Download the configuration file:
+   - For Android: `google-services.json`
+   - For iOS: `GoogleService-Info.plist`
+
+### Android Setup
+1. Place `google-services.json` in the `android/app` directory
+2. Add the following to your `android/build.gradle`:
+   ```gradle
+   dependencies {
+       classpath 'com.google.gms:google-services:4.4.0'
+   }
+   ```
+3. Add this to your `android/app/build.gradle`:
+   ```gradle
+   apply plugin: 'com.google.gms.google-services'
+   ```
+
+### iOS Setup
+1. Place `GoogleService-Info.plist` in the `ios/Runner` directory
+2. Add the following to your `ios/Podfile`:
+   ```ruby
+   pod 'Firebase/Core'
+   ```
+3. Run `pod install` in the `ios` directory
+
+For more detailed setup instructions, refer to the [Firebase Flutter documentation](https://firebase.google.com/docs/flutter/setup).
+
 ## 📚 API Setup
 
 ### 🔐 Gemini API (MakerSuite)
-1. Go to https://makersuite.google.com
-2. Get your API key
-3. Add it to `.env` as shown above
+1. Go to [MakerSuite](https://makersuite.google.com)
+2. Create a new project or select an existing one
+3. Click on the "Settings" icon (⚙️) in the top right corner
+4. Navigate to the "API" tab
+5. Click "Get API Key"
+6. Copy the API key and add it to your `.env` file:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
 
-### 🗣 Google Speech-to-Text
-1. Go to https://console.cloud.google.com/
-2. Create a project + enable Speech-to-Text API
-3. Create a Service Account and download the JSON key
-4. Save it as `assets/service-account.json`
+### 🗣 Google Speech-to-Text Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select an existing one
+3. Enable the following APIs:
+   - Speech-to-Text API
+   - Cloud Translation API (if needed)
+
+#### Create Service Account
+1. Navigate to IAM & Admin > Service Accounts
+2. Click "Create Service Account"
+3. Fill in the details:
+   - Service account name: `gradready-speech`
+   - Service account ID: `gradready-speech`
+   - Description: `Service account for GradReady Speech-to-Text`
+4. Click "Create and Continue"
+5. Grant the following roles:
+   - Speech-to-Text API User
+   - Storage Object Viewer
+6. Click "Continue" then "Done"
+
+#### Create Service Account Key
+1. Find your service account in the list
+2. Click the three dots (⋮) on the right
+3. Select "Manage keys"
+4. Click "Add key" > "Create new key"
+5. Select JSON format
+6. Click "Create"
+7. Save the JSON file as `service-account.json` in your project's `assets` directory
+
+#### Configure Flutter Project
+1. Add the service account file to your Flutter project:
+   - Place `service-account.json` in `assets/` directory
+2. Update `pubspec.yaml` to include the service account file:
+   ```yaml
+   flutter:
+     assets:
+       - assets/service-account.json
+   ```
+
+For more detailed setup instructions, refer to the official documentation:
+- [Speech-to-Text API Documentation](https://cloud.google.com/speech-to-text/docs)
+- [MakerSuite API Documentation](https://makersuite.google.com/app/api-docs)
 
 ## 🧪 Troubleshooting
 
@@ -88,7 +167,41 @@ If the app doesn't pick up your microphone:
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="assets/screenshots/app_preview.png" alt="App Preview" width="300">
+  <h3>App Overview</h3>
+  <img src="assets/screenshots/SplashScreen.png" alt="Splash Screen" width="250">
+  <img src="assets/screenshots/LoginPage.png" alt="Login Page" width="250">
+  <img src="assets/screenshots/SignUpPage.png" alt="Sign Up Page" width="250">
+</div>
+
+<div align="center">
+  <h3>Main Features</h3>
+  <img src="assets/screenshots/Homepage.png" alt="Home Page" width="250">
+  <img src="assets/screenshots/PresentationHomepage.png" alt="Presentation Homepage" width="250">
+  <img src="assets/screenshots/ProfilePage.png" alt="Profile Page" width="250">
+</div>
+
+<div align="center">
+  <h3>Interview Features</h3>
+  <img src="assets/screenshots/MockInterview.png" alt="Mock Interview" width="250">
+  <img src="assets/screenshots/InterviewQuestion.png" alt="Interview Question" width="250">
+  <img src="assets/screenshots/InterviewAnalysis.png" alt="Interview Analysis" width="250">
+</div>
+
+<div align="center">
+  <h3>Presentation Features</h3>
+  <img src="assets/screenshots/LivePresentationSpeech.png" alt="Live Presentation Speech" width="250">
+  <img src="assets/screenshots/LivePresentationAnalysis1.png" alt="Live Presentation Analysis 1" width="250">
+  <img src="assets/screenshots/LivePresentationAnalysis2.png" alt="Live Presentation Analysis 2" width="250">
+</div>
+
+<div align="center">
+  <h3>Audio Analysis</h3>
+  <img src="assets/screenshots/AudioAnalysis.png" alt="Audio Analysis" width="250">
+</div>
+
+<div align="center">
+  <h3>Settings</h3>
+  <img src="assets/screenshots/SettingsPage.png" alt="Settings Page" width="250">
 </div>
 
 ## 🧑‍💻 Contributors
