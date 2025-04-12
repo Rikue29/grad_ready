@@ -55,63 +55,59 @@ class PresentationHomePage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Pick an option to begin",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 225), // Add space from top
+                  const Text(
+                    "Pick an option to begin",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    children: [
-                      _buildTile(
-                        context,
-                        icon: Icons.question_answer,
-                        title: "Interview Practice",
-                        description: "Prepare for your interviews.",
-                        onTap: () {
-                          Navigator.pushNamed(context, '/interview');
-                        },
-                      ),
-                      _buildTile(
-                        context,
-                        icon: Icons.videocam,
-                        title: "Live Presentation",
-                        description: "Practice live presentations.",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const LivePresentationPage(),
-                            ),
-                          );
-                        },
-                      ),
-                      _buildTile(
-                        context,
-                        icon: Icons.upload_file,
-                        title: "Upload File",
-                        description: "Analyze your files.",
-                        onTap: () {
-                          Navigator.pushNamed(context, '/audio-analysis');
-                        },
-                      ),
-                    ],
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _buildTile(
+                          context,
+                          icon: Icons.videocam,
+                          title: "Live Presentation",
+                          description: "Practice live presentations.",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const LivePresentationPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        _buildTile(
+                          context,
+                          icon: Icons.upload_file,
+                          title: "Upload File",
+                          description: "Analyze your files.",
+                          onTap: () {
+                            Navigator.pushNamed(context, '/audio-analysis');
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
