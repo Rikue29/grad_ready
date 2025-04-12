@@ -189,11 +189,12 @@ If the app doesn't pick up your microphone:
 
 <div align="center">
   <h3>Presentation Features</h3>
-  <img src="assets/screenshots/PresentationHomepage.png" alt="Presentation Homepage"
-   width="250">
+  <img src="assets/screenshots/PresentationHomepage.png" alt="Presentation Homepage" width="250">
   <img src="assets/screenshots/LivePresentationSpeech.png" alt="Live Presentation Speech" width="250">
-  <img src="assets/screenshots/LivePresentationAnalysis1.png" alt="Live Presentation Analysis 1" width="250">
-  <img src="assets/screenshots/LivePresentationAnalysis2.png" alt="Live Presentation Analysis 2" width="250">
+  <div style="display: flex; justify-content: center; gap: 16px;">
+    <img src="assets/screenshots/LivePresentationAnalysis1.png" alt="Live Presentation Analysis 1" width="250">
+    <img src="assets/screenshots/LivePresentationAnalysis2.png" alt="Live Presentation Analysis 2" width="250">
+  </div>
 </div>
 
 <div align="center">
