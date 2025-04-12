@@ -1,69 +1,71 @@
 # 🎙️ GradReady Interview App
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An AI-powered mobile app built with Flutter that lets users practice interview questions using real-time voice transcription and AI-generated feedback.
 
-Powered by:
-- ✅ Google Speech-to-Text API (for converting speech to text)
-- ✅ Gemini AI (for generating questions and giving interview feedback)
+## 🚀 Features
+- 🎤 Real-time voice recording and transcription
+- 🤖 Intelligent AI feedback on:
+  - Clarity of speech
+  - Tone and delivery
+  - Use of filler words
+  - Overall presentation quality
+- 📋 Dynamic question generation based on job roles
+- 🧠 Presentation mode with topic-based feedback
+- 🔄 Continuous practice mode
 
----
-
-## 📦 Features
-- 🎤 Record your voice responses to interview questions or presentations
-- 🤖 Get intelligent AI feedback on clarity, tone, and use of filler words
-- 📋 Dynamically generate questions based on job roles
-- 🧠 Present a topic and get reviewed on simplicity and audience understanding
-- 🔄 Keep going with new questions or topics non-stop
----
+## 📱 Platforms Supported
+- 📱 Android
+- 🍏 iOS
+- 🖥 Web
+- 🐧 Linux
+- 🍎 macOS
+- 🪟 Windows
 
 ## 🛠 Requirements
 - Flutter SDK 3.7+
 - Android Studio / VS Code
-- A valid Google API service account (for Speech-to-Text)
-- A Gemini API key from Google Ai Studio
-
----
+- Google API service account (for Speech-to-Text)
+- Gemini API key from Google Ai Studio
 
 ## 📁 Setup Instructions
 
-### 1. Clone the repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/rikue29/grad_ready.git
-cd gradready-interview
+cd grad_ready
 ```
 
-### 2. Add your `.env` file
+### 2. Environment Setup
 Create a `.env` file in the project root:
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-### 3. Add your Google Speech-to-Text service account key
-Place your `service-account.json` in:
-```
-assets/service-account.json
-```
+### 3. Google Speech-to-Text Configuration
+1. Place your `service-account.json` in:
+   ```
+   assets/service-account.json
+   ```
+2. Update `pubspec.yaml`:
+   ```yaml
+   flutter:
+     assets:
+       - assets/service-account.json
+   ```
 
-Update `pubspec.yaml`:
-```yaml
-flutter:
-  assets:
-    - assets/service-account.json
-```
-
-### 4. Install dependencies
+### 4. Install Dependencies
 ```bash
 flutter pub get
 ```
 
-### 5. Run the app
+### 5. Run the App
 ```bash
 flutter run
 ```
 
----
-
-## 📚 Environment & API Setup
+## 📚 API Setup
 
 ### 🔐 Gemini API (MakerSuite)
 1. Go to https://makersuite.google.com
@@ -73,28 +75,35 @@ flutter run
 ### 🗣 Google Speech-to-Text
 1. Go to https://console.cloud.google.com/
 2. Create a project + enable Speech-to-Text API
-3. Create a **Service Account** and download the JSON key
+3. Create a Service Account and download the JSON key
 4. Save it as `assets/service-account.json`
 
----
+## 🧪 Troubleshooting
 
-## ✨ Screenshots
-(Insert screenshots of the UI here)
-
----
-
-## 🧪 Test Voice Input
-If the app doesn't pick up your mic:
-- On Android emulator → Enable mic input in extended controls
+### Voice Input Issues
+If the app doesn't pick up your microphone:
+- On Android emulator: Enable mic input in extended controls
 - Use a real Android phone for best results
 
----
+## 📸 Screenshots
+
+<div align="center">
+  <img src="assets/screenshots/app_preview.png" alt="App Preview" width="300">
+</div>
 
 ## 🧑‍💻 Contributors
-- Ariq Ulwan, Nur Akmal, Nurin Adni, Shane Kennedy – idea, design, and full implementation
-- Special thanks to KitaHack for the opportunity
+- Ariq Ulwan
+- Nur Akmal
+- Nurin Adni
+- Shane Kennedy
 
----
+Special thanks to KitaHack for the opportunity
 
 ## 📄 License
 This project is open source and available under the MIT License.
+
+## 📬 Feedback & Support
+For any questions, feedback, or support, please open an issue in the repository.
+
+## 🌟 Star the Project
+If you find this project useful, please give it a star ⭐ on GitHub!
