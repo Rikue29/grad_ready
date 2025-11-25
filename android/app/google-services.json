@@ -12,12 +12,6 @@
           "package_name": "com.example.grad_ready"
         }
       },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA3ONpNI_BrXhsL3JOYWQNmHR5LDls4RnY"
-        }
-      ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": []
